@@ -26,7 +26,19 @@ public class DES {
         }
         this.smallerMainKey = smallerMainKey;
     }
-    
+
+    /**
+     * Generate 16 sub-keys
+     */
+    public void generateSubKeys() {
+        // get smaller main key
+        // split it in two halves
+        int C0 = (int) Helper.extractBits(smallerMainKey,28,0); // 28 bit matter
+        int D0 = (int) Helper.extractBits(smallerMainKey,28,28); // 28 bit matter
+
+        // generate 16 sub-keys
+    }
+
 
     public long getSmallerMainKey() {
         return smallerMainKey;

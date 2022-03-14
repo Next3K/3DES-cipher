@@ -58,4 +58,28 @@ public class Helper {
         }
         return src;
     }
+
+    /**
+     * right most bit has index 0. Returns bits [pos + n - 1, ... ,pos] total: n
+     * @param number input number.
+     * @param k number of bits to extract.
+     * @param pos position of first bit to extract
+     * @return number representing extracted bits
+     */
+    public static int extractBits(int number, int k, int pos) { // left most bit has position 0
+        pos++;
+        return ((1 << k) - 1) & (number >> (pos - 1));
+    }
+
+    /**
+     * right most bit has index 0. Returns bits [pos + n - 1, ... ,pos] total: n
+     * @param number input number.
+     * @param k number of bits to extract.
+     * @param pos position of first bit to extract
+     * @return number representing extracted bits
+     */
+    public static long extractBits(long number, int k, int pos) { // left most bit has position 0
+        pos++;
+        return ((1L << k) - 1) & (number >> (pos - 1));
+    }
 }

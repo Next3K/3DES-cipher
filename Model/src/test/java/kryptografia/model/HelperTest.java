@@ -32,5 +32,18 @@ public class HelperTest {
         assertEquals(expected,des.getSmallerMainKey());
     }
 
+    @Test
+    public void testExtractBits() {
+        long key56bit = 0b00000000_1111000_0110011_0010101_0101111_0101010_1011001_1001111_0001111L;
+        int leftBits = 0b1111000_0110011_0010101_0101111;
+        int rightBits = 0b0101010_1011001_1001111_0001111;
+        assertEquals(rightBits,Helper.extractBits(key56bit,28,0));
+        assertEquals(leftBits,Helper.extractBits(key56bit,28,28));
+        assertEquals(0b1,Helper.extractBits(0b0000111,1,0));
+        assertEquals(0b0110,Helper.extractBits(0b01100,4,1));
+        assertEquals(0b0111,Helper.extractBits(0b00001110000,4,4));
+        assertEquals(0b100011,Helper.extractBits(0b1000111,6,1));
+    }
+
 
 }
