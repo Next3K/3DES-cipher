@@ -11,8 +11,8 @@ public class HelperTest {
 
     @Test
     public void testGetBit() {
-        assertEquals(1,Helper.getBit(0b0000,0));
-        assertEquals(0,Helper.getBit(0b0100,0));
+        assertEquals(0,Helper.getBit(0b0000,0));
+        assertEquals(1,Helper.getBit(0b0100,2));
         assertEquals(1,Helper.getBit(0b1000,3));
     }
 
@@ -43,6 +43,48 @@ public class HelperTest {
         assertEquals(0b0110,Helper.extractBits(0b01100,4,1));
         assertEquals(0b0111,Helper.extractBits(0b00001110000,4,4));
         assertEquals(0b100011,Helper.extractBits(0b1000111,6,1));
+    }
+
+    @Test
+    public void testSetBits() {
+        assertEquals(0b0011, Helper.setBits(0b11,2,0b0000,0));
+        assertEquals(0b0011100, Helper.setBits(0b1110,4,0,1));
+    }
+
+    @Test
+    public void testLeftShift() {
+        assertEquals(0b010, Helper.leftShift(0b001,1,3));
+        assertEquals(0b001, Helper.leftShift(0b001,3,3));
+        assertEquals(0b00100, Helper.leftShift(0b00100,5,5));
+        assertEquals(0b011100, Helper.leftShift(0b100011,3,6));
+        assertEquals(0b011000, Helper.leftShift(0b000110,2,6));
+        assertEquals(0b011000, Helper.leftShift(0b011000,0,6));
+        assertEquals(0b1001, Helper.leftShift(0b01001,4,4));
+        assertEquals(0b00000000_00000000_00000000_00000001,
+                Helper.leftShift(0b10000000_00000000_00000000_00000000,1,32));
+        assertEquals(0b00000000_00000000_00000000_10000001,
+                Helper.leftShift(0b10000001_00000000_00000000_00000000,8,32));
+        assertEquals(0b00100000_00000000_00000000_00011111,
+                Helper.leftShift(0b11111001_00000000_00000000_00000000,5,32));
+    }
+
+    @Test
+    public void testRightShift() {
+        assertEquals(0b0010, Helper.rightShift(0b0100,1,4));
+        assertEquals(0b0100, Helper.rightShift(0b0001,2,4));
+        assertEquals(0b1000, Helper.rightShift(0b1000,4,4));
+        assertEquals(0b11001, Helper.rightShift(0b01110,3,5));
+        assertEquals(0b011111, Helper.rightShift(0b111110,7,6));
+        assertEquals(0b10000000_00000000_00000000_00000000,
+                Helper.rightShift(1,1,32));
+        assertEquals(0b00011100_00000000_00000000_00000000,
+                Helper.rightShift(0b111,6,32));
+        assertEquals(0b10000000_00000000_00000000_00000000, // big bits fail
+                Helper.rightShift(0b00000000_00000000_00000000_00000001,1,32));
+        assertEquals(0b10000001_00000000_00000000_00000000,
+                Helper.rightShift(0b00000000_00000000_00000000_10000001,8,32));
+        assertEquals(0b11111001_00000000_00000000_00000000,
+                Helper.rightShift(0b00100000_00000000_00000000_00011111,5,32));
     }
 
 

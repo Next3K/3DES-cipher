@@ -66,7 +66,7 @@ public class Helper {
      * @param pos position of first bit to extract
      * @return number representing extracted bits
      */
-    public static int extractBits(int number, int k, int pos) { // left most bit has position 0
+    public static int extractBits(int number, int k, int pos) {
         pos++;
         return ((1 << k) - 1) & (number >> (pos - 1));
     }
@@ -81,5 +81,64 @@ public class Helper {
     public static long extractBits(long number, int k, int pos) { // left most bit has position 0
         pos++;
         return ((1L << k) - 1) & (number >> (pos - 1));
+    }
+
+    /**
+     * Circular left shift.
+     * @param n number to shift.
+     * @param k number of places to shift.
+     * @return shifted number
+     */
+    public static int leftShift(int n, int k, int importantBits)
+    {
+        if (importantBits == 32) { // full int capacity
+            int leftBits = Helper.extractBits(n,k,importantBits - k);
+            n = (n << k);
+            n = Helper.setBits(leftBits,k,n,0);
+            return n;
+        }
+        int numberShifted = 0;
+        int bitsLeft = 32 - importantBits; // 32 int capacity
+        if (k <= bitsLeft) {
+            int leftMostBits = Helper.extractBits(n,k,importantBits - k);
+            numberShifted = (n << k) | (n >> (Integer.SIZE - k));
+            int offsetBita = Helper.extractBits(numberShifted,k,importantBits);
+            numberShifted = Helper.setBits(offsetBita,k,numberShifted,0);
+            numberShifted = Helper.setBits(0,k,numberShifted,importantBits);
+            return numberShifted;
+        } else {
+            return Helper.leftShift(n, k - bitsLeft,importantBits);
+        }
+    }
+
+    /**
+     * Circular right shift.
+     * @param n number to shift.
+     * @param k number of places to shift.
+     * @return shifted number
+     */
+    public static int rightShift(int n, int k, int importantBits)
+    {
+        int notImportantBits = 32 - importantBits;
+        int rightmostBits = Helper.extractBits(n,k,0); // k bits that can not be forgotten
+        int numberShifted = (n >> k) | (n << (Integer.SIZE - k)); // shift k places
+        numberShifted = Helper.setBits(0,notImportantBits,numberShifted,importantBits);
+        numberShifted = Helper.setBits(rightmostBits,k,numberShifted,importantBits - k);
+        return numberShifted;
+    }
+
+    /**
+     * Sets a subset of bits inside another set of bits
+     * @param sourceNumber set of bits to set
+     * @param numberOfBits number of bits in source number
+     * @param destNum number to set bits inside
+     * @param startPosition where to start setting a range of bits
+     * @return
+     */
+    public static int setBits(int sourceNumber, int numberOfBits, int destNum, int startPosition) {
+        for (int i = 0; i < numberOfBits; i++) {
+            destNum = Helper.setBit(destNum,startPosition + i, Helper.getBit(sourceNumber,i));
+        }
+        return  destNum;
     }
 }
