@@ -31,7 +31,6 @@ public class DES {
      * Generate 16 sub-keys
      */
     public void generateSubKeys() {
-        // get smaller main key
         // split it in two halves
         int C0 = (int) Helper.extractBits(smallerMainKey,28,0); // 28 bit matter
         int D0 = (int) Helper.extractBits(smallerMainKey,28,28); // 28 bit matter
