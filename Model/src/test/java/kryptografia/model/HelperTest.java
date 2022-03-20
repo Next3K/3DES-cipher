@@ -66,6 +66,14 @@ public class HelperTest {
                 Helper.leftShift(0b10000001_00000000_00000000_00000000,8,32));
         assertEquals(0b00100000_00000000_00000000_00011111,
                 Helper.leftShift(0b11111001_00000000_00000000_00000000,5,32));
+        assertEquals(0b0000000_0000000_0000000_0001000,
+                Helper.leftShift(0b1000000_0000000_0000000_0000000,4,28));
+        assertEquals(0b1110000_0000000_0000000_0001111,
+                Helper.leftShift(0b1111111_0000000_0000000_0000000,4,28));
+        assertEquals(0b00111100_00000011_11111111,
+                Helper.leftShift(0b11111111_00111100_00000011,8,24));
+        assertEquals(0b10,
+                Helper.leftShift(0b01,3,2));
     }
 
     @Test
@@ -85,6 +93,15 @@ public class HelperTest {
                 Helper.rightShift(0b00000000_00000000_00000000_10000001,8,32));
         assertEquals(0b11111001_00000000_00000000_00000000,
                 Helper.rightShift(0b00100000_00000000_00000000_00011111,5,32));
+        assertEquals(0b00001000_00000000_00000000_00000000,
+                Helper.rightShift(1,1,28));
+        assertEquals(0b0001_11000000_00000000_00000000, // only 28 bits from 32 are important.
+                Helper.rightShift(0b111,6,28));
+        assertEquals(0b00_11111111_11111111_000000, // big bits fail
+                Helper.rightShift(0b11111111_00000000_11111111,10,24));
+        assertEquals(0b10,
+                Helper.rightShift(0b01,3,2));
+
     }
 
 
