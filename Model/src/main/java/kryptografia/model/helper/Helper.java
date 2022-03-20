@@ -143,4 +143,20 @@ public class Helper {
         }
         return  destNum;
     }
+
+
+    /**
+     * Sets a subset of bits inside another set of bits.
+     * @param sourceNumber set of bits to set.
+     * @param numberOfBits number of bits in source number.
+     * @param destNum number to set bits inside.
+     * @param startPosition where to start setting a range of bits.
+     * @return number with set bits.
+     */
+    public static long  setBits(int sourceNumber, int numberOfBits, long destNum, int startPosition) {
+        for (int i = 0; i < numberOfBits; i++) {
+            destNum = Helper.setBit(destNum,startPosition + i, Helper.getBit(sourceNumber,i));
+        }
+        return  destNum;
+    }
 }

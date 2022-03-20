@@ -26,7 +26,7 @@ public class HelperTest {
     @Test
     public void generateSmallerMainKey() {
         long mainKey = 0b00010011_00110100_01010111_01111001_10011011_10111100_11011111_11110001L;
-        DES des = new DES(mainKey, "test");
+        DES des = new DES(mainKey);
         des.generateSmallerMainKey();
         long expected = 0b00000000_1111000_0110011_0010101_0101111_0101010_1011001_1001111_0001111L;
         assertEquals(expected,des.getSmallerMainKey());
