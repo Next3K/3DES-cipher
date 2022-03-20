@@ -11,7 +11,7 @@ public class Tables {
 
 
     /**
-     * Permutation table needed to generate 56 bit sub-key from main key.
+     * Permutation table needed to generate 56 bit sub-key from main 64bit key.
      */
     public final static int[] PC1 =
             new int[]{57, 49, 41, 33, 25, 17, 9,
@@ -27,7 +27,7 @@ public class Tables {
      * Permutation table needed to generate 16 sub-keys.
      */
     public final static int[] PC2 =
-            new int[]{16, 17, 11, 24, 1, 5,
+            new int[]{14, 17, 11, 24, 1, 5,
                     3, 28, 15, 6, 21, 10,
                     23, 19, 12, 4, 26, 8,
                     16, 7, 27, 20, 13, 2,
@@ -36,7 +36,14 @@ public class Tables {
                     44, 49, 39, 56, 34, 53,
                     46, 42, 50, 36, 29, 32};
 
+
     /**
+     * Key shifts in each cycle (1 - 16).
+     */
+    public final static int[] SHIFTS = new int[] {1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1};
+
+    /**
+     * Initial permutation table.
      * Permutation table needed to permute 64 bit message block.
      */
     public final static int[] IP =
@@ -50,6 +57,7 @@ public class Tables {
                     63, 55, 47, 39, 31, 23, 15, 7};
 
     /**
+     * Expansion box.
      * E bit selection table.
      */
     public final static int[] EBIT =
@@ -108,6 +116,14 @@ public class Tables {
                     {4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12, 5, 6, 3, 0, 14},
                     {11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3}};
 
+    /**
+     * Sbox s6 table
+     */
+    public final static int[][] S6 =
+            new int[][]{{1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11},
+                    {10, 15, 4 , 2, 7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8},
+                    {9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10 ,1, 13, 11, 6},
+                    {4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13}};
 
     /**
      * Sbox s7 table
@@ -152,6 +168,6 @@ public class Tables {
                     36, 4, 44, 12, 52, 20, 60, 28,
                     35, 3, 43, 11, 51, 19, 59, 27,
                     34, 2, 42, 10, 50, 18, 58, 26,
-                    33, 1, 41, 0, 49, 17, 57, 25};
+                    33, 1, 41, 9, 49, 17, 57, 25};
 
 }
