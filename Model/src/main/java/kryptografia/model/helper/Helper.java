@@ -60,7 +60,7 @@ public class Helper {
     }
 
     /**
-     * right most bit has index 0. Returns bits [pos + n - 1, ... ,pos] total: n
+     * right most bit has an index 0. Returns bits [pos + n - 1, ... ,pos] total: n
      * @param number input number.
      * @param k number of bits to extract.
      * @param pos position of first bit to extract
@@ -72,7 +72,7 @@ public class Helper {
     }
 
     /**
-     * right most bit has index 0. Returns bits [pos + n - 1, ... ,pos] total: n
+     * right most bit has an index 0. Returns bits [pos + n - 1, ... ,pos] total: n
      * @param number input number.
      * @param k number of bits to extract.
      * @param pos position of first bit to extract
@@ -91,6 +91,7 @@ public class Helper {
      */
     public static int leftShift(int n, int k, int importantBits)
     {
+        k = k % importantBits; // when left shift number is bigger than important bits
         if (importantBits == 32) { // full int capacity
             int leftBits = Helper.extractBits(n,k,importantBits - k);
             n = (n << k);
@@ -119,6 +120,7 @@ public class Helper {
      */
     public static int rightShift(int n, int k, int importantBits)
     {
+        k = k % importantBits; // when right shift number is bigger than important bits
         int notImportantBits = 32 - importantBits;
         int rightmostBits = Helper.extractBits(n,k,0); // k bits that can not be forgotten
         int numberShifted = (n >> k) | (n << (Integer.SIZE - k)); // shift k places
@@ -128,14 +130,14 @@ public class Helper {
     }
 
     /**
-     * Sets a subset of bits inside another set of bits
-     * @param sourceNumber set of bits to set
-     * @param numberOfBits number of bits in source number
-     * @param destNum number to set bits inside
-     * @param startPosition where to start setting a range of bits
-     * @return
+     * Sets a subset of bits inside another set of bits.
+     * @param sourceNumber set of bits to set.
+     * @param numberOfBits number of bits in source number.
+     * @param destNum number to set bits inside.
+     * @param startPosition where to start setting a range of bits.
+     * @return number with set bits.
      */
-    public static int setBits(int sourceNumber, int numberOfBits, int destNum, int startPosition) {
+    public static int  setBits(int sourceNumber, int numberOfBits, int destNum, int startPosition) {
         for (int i = 0; i < numberOfBits; i++) {
             destNum = Helper.setBit(destNum,startPosition + i, Helper.getBit(sourceNumber,i));
         }
