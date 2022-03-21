@@ -5,7 +5,7 @@ import kryptografia.model.helper.Tables;
 
 public class DES {
 
-    private long mainKey;
+    private final long mainKey;
     private final long[] subKeys = new long[16];
     private long smallerMainKey; // 56 bit key created form main key.
     private int C0 = 0;
@@ -23,8 +23,13 @@ public class DES {
      * @return encrypted 64 bits, long number.
      */
     public long encrypt(long data64bit) {
-        // TODO link all methods to encrypt block of data
-        return this.encryptedData64bit;
+        this.setData64bit(data64bit); // set block of data to encrypt
+        this.initialDataBlockPermutation(); // permutation of 64 bit initial data.
+        this.generateSmallerMainKey(); // generate 56bit key from 64bit main key.
+        this.create28BitHalfKeys(); // divide 56 bit key into two 28bit parts.
+        this.generateSubKeys(); // generate 16 48bit sub-keys.
+        this.execute16Rounds(); // 16 rounds of encryption.
+        return this.encryptedData64bit; // return encrypted data.
     }
 
     /**
@@ -184,7 +189,7 @@ public class DES {
     /**
      * initial permutation of 64bit message with IP table.
      */
-    public void initialPermutation() {
+    public void initialDataBlockPermutation() {
         long messageCopy = this.data64bit; // copy the initial data
         for (int i = 1; i <= Tables.IP.length; i++) { // form i = 1 to i = 64
             int positionOfBit = 64 - Tables.IP[i - 1]; // get position of bit inside 64bit key
