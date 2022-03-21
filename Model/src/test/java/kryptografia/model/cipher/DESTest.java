@@ -40,7 +40,7 @@ public class DESTest {
         long message64bit = 0b0000_0001_0010_0011_0100_0101_0110_0111_1000_1001_1010_1011_1100_1101_1110_1111L;
         DES des = new DES(0L);
         des.setData64bit(message64bit);
-        des.initialPermutation();
+        des.initialDataBlockPermutation();
         long actual = des.getData64bit();
         assertEquals(0b1100_1100_0000_0000_1100_1100_1111_1111_1111_0000_1010_1010_1111_0000_1010_1010L,actual);
 
