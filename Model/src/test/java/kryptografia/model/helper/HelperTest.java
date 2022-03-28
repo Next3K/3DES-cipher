@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HelperTest {
 
-
+    // hello
     @Test
     public void testGetBit() {
         assertEquals(0,Helper.getBit(0b0000,0));
@@ -31,6 +31,7 @@ public class HelperTest {
         long expected = 0b00000000_1111000_0110011_0010101_0101111_0101010_1011001_1001111_0001111L;
         assertEquals(expected,des.getSmallerMainKey());
     }
+
 
     @Test
     public void testExtractBits() {
