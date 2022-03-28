@@ -1,4 +1,4 @@
-package kryptografia.model;
+package kryptografia.model.helper;
 
 import kryptografia.model.cipher.DES;
 import kryptografia.model.helper.Helper;
