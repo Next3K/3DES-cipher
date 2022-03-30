@@ -176,8 +176,8 @@ public class DES {
             CD = Helper.setBits(CX,28,0L,28); // create long form int
             CD = Helper.setBits(DX,28,0L,0); // create long form int
             long tmp = 0;
-            for (int j = 1; j <= Tables.PC1.length; j++) { // Tables.PC1.length = 48
-                int positionOfBit = 56 - Tables.PC1[j - 1]; // get position of bit inside 56 bit key
+            for (int j = 1; j <= Tables.PC2.length; j++) { // Tables.PC2.length = 48
+                int positionOfBit = 56 - Tables.PC2[j - 1]; // get position of bit inside 56 bit key
                 int bitValueToSet = Helper.getBit(CD, positionOfBit); // get value of bit
                 int positionOfBitInLong = 48 - j;
                 tmp = Helper.setBit(tmp, positionOfBitInLong, bitValueToSet); // set value
