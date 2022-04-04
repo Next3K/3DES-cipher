@@ -1,17 +1,15 @@
 package kryptografia.model.helper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Holds permutation, expansion, contraction tables.
+ * Holds:
+ *  - permutation tables.
+ *  - expansion tables.
+ *  - contraction tables.
  */
 public class Tables {
 
-
     /**
-     * Permutation table needed to generate 56 bit sub-key from main 64bit key.
+     * Permutation table needed to generate 56-bit sub-key from main 64-bit key.
      */
     public final static int[] PC1 =
             new int[]{57, 49, 41, 33, 25, 17, 9,
@@ -38,9 +36,10 @@ public class Tables {
 
 
     /**
-     * Key shifts in each cycle (1 - 16).
+     * Key left shifts in each cycle (1 - 16).
      */
-    public final static int[] SHIFTS = new int[] {1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1};
+    public final static int[] LEFT_SHIFTS = new int[] {1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1};
+
 
     /**
      * Initial permutation table.
@@ -61,14 +60,10 @@ public class Tables {
      * E bit selection table.
      */
     public final static int[] EBIT =
-            new int[]{32, 1, 2, 3, 4, 5, 4, 5,
-                    6, 7, 8, 9, 8, 9,
-                    10, 11, 12, 13,
-                    12, 13, 14, 15, 16, 17,
-                    16, 17, 18, 19, 20, 21,
-                    20, 21, 22, 23, 24, 25,
-                    24, 25, 26, 27, 28, 29,
-                    28, 29, 30, 31, 32, 1};
+            new int[]{32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9,
+                    8, 9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
+                    16, 17, 18, 19, 20, 21, 20, 21, 22, 23, 24, 25,
+                    24, 25, 26, 27, 28, 29, 28, 29, 30, 31, 32, 1};
 
     /**
      * S1 bit table.
@@ -145,7 +140,8 @@ public class Tables {
 
 
     /**
-     * Final stage of f-permutation.
+     * Final stage of F()
+     * Permutation of 32-bit s-block outcome
      */
     public final static int[] PF =
             new int[]{16, 7, 20, 21,

@@ -1,5 +1,6 @@
 package kryptografia.model.cipher;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +12,17 @@ public class DESTest {
 
     @Test
     public void testGenerateSubKeys() {
-
+        DES des = new DES(0xAABB09182736CCDDL);
+        des.encrypt(0x123456ABCD132536L);
+        Assert.assertArrayEquals(new long[]{
+                        0x194CD072DE8CL,0x4568581ABCCEL,
+                        0x06EDA4ACF5B5L,0xDA2D032B6EE3L,
+                        0x69A629FEC913L,0xC1948E87475EL,
+                        0x708AD2DDB3C0L,0x34F822F0C66DL,
+                        0x84BB4473DCCCL,0x02765708B5BFL,
+                        0x6D5560AF7CA5L,0xC2C1E96A4BF3L,
+                        0x99C31397C91FL,0x251B8BC717D0L,
+                        0x3330C5D9A36DL,0x181C5D75C66DL},des.getSubKeys());
     }
 
 

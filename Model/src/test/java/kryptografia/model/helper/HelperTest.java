@@ -1,19 +1,20 @@
 package kryptografia.model.helper;
 
 import kryptografia.model.cipher.DES;
-import kryptografia.model.helper.Helper;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HelperTest {
 
-    // hello
     @Test
     public void testGetBit() {
         assertEquals(0,Helper.getBit(0b0000,0));
         assertEquals(1,Helper.getBit(0b0100,2));
         assertEquals(1,Helper.getBit(0b1000,3));
+        assertEquals(1,Helper.getBit(0b100001000000,6));
+        assertEquals(0, Helper.getBit(0b11011110_10110011_00111001_00100010,29));
+        assertEquals(0, Helper.getBit(0b11011110_10110011_01111001_00100010,15));
     }
 
 
@@ -21,6 +22,12 @@ public class HelperTest {
     public void testSetBit(){
         assertEquals(0b001,Helper.setBit(0,0,1));
         assertEquals(0b000,Helper.setBit(0b1000,3,0));
+        assertEquals(0b11011110_10110011_00111001_00100010,
+                Helper.setBit(0b11011110_10110011_00111001_00100011,0,0));
+        assertEquals(0b11011110_10110011_00111001_00100010,
+                Helper.setBit(0b01011110_10110011_00111001_00100010,31,1));
+
+
     }
 
     @Test
