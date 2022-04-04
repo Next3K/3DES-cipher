@@ -1,20 +1,20 @@
 package kryptografia.model;
 
-import kryptografia.model.cipher.DES;
+import kryptografia.model.cipher.ThreeDes;
 
 
 public class Main {
     public static void main(String[] args) {
 
-        long mainKey = 0xAABB09182736CCDDL;
+        long key1 = 0xAABB09182736CCDDL;
+        long key2 = 0x9182736A0CCDABBDL;
+        long key3 = 0x6CCA9182A73BB0DDL;
         long data64bit = 0x123456ABCD132536L;
 
-        DES encryptingDes = new DES(mainKey);
-        long encryptedMessage = encryptingDes.encrypt(data64bit);
-        DES decryptingDes = new DES(mainKey);
-        long decryptedMessage = decryptingDes.decrypt(encryptedMessage);
+        ThreeDes threeDes = new ThreeDes(key1, key2, key3);
+        long decryptedData = threeDes.decrypt(threeDes.encrypt(data64bit));
 
-        System.out.println("Symmetrical encryption-decryption status: " +
-                ((decryptedMessage == data64bit) ? "success" : "failure"));
+        System.out.println("3DES Symmetrical encryption-decryption status: " +
+                ((data64bit == decryptedData) ? "success" : "failure"));
     }
 }
