@@ -1,9 +1,53 @@
 package kryptografia.model.helper;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 /**
  *  Class with helpful functions.
  */
 public class Helper {
+
+
+    /**
+     * Converts array of bytes into long number
+     * @param bytes array of bytes
+     * @return 64-bit number; long
+     */
+    static long convertToLong(byte[] bytes)
+    {
+        long value = 0L;
+        for (byte b : bytes) {
+            value = (value << 8) + (b & 255);
+        }
+        return value;
+    }
+
+    /**
+     * Generates three long numbers that serve as keys to 3DES cipher.
+     * Generated numbers are based on plain text representing encryption password.
+     * @param password encryption password.
+     * @return array containing three long numbers.
+     */
+    public static long[] generateKeysFromPassword(String password) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        byte[] byteArray = digest.digest(password.getBytes(StandardCharsets.UTF_8)); // 32 bytes each 8 bit
+        byte[] subarray1 = new byte[8]; // 8 bytes each 8 bit, 64 bit total
+        byte[] subarray2 = new byte[8]; // 8 bytes each 8 bit, 64 bit total
+        byte[] subarray3 = new byte[8]; // 8 bytes each 8 bit, 64 bit total
+        System.arraycopy(byteArray,0,subarray1,0,8);
+        System.arraycopy(byteArray,8,subarray2,0,8);
+        System.arraycopy(byteArray,16,subarray3,0,8);
+        return new long[]{convertToLong(subarray1), convertToLong(subarray2), convertToLong(subarray3)};
+    }
 
     /**
      * Print bit representation of number.
