@@ -10,7 +10,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("game-view.fxml")
+                getClass().getResource("hello-view.fxml")
         );
         Scene scene = new Scene(fxmlLoader.load(),600, 700);
         stage.setScene(scene);
@@ -22,4 +22,4 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-}
+} 
