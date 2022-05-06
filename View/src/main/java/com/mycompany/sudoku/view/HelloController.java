@@ -65,8 +65,7 @@ public class HelloController implements Initializable {
             tekstJawny.setDisable(false);
             szyfrogram.setDisable(false);
             plikJawny.setText("");
-            plikSzyfrogram.setText("");
-            
+            plikSzyfrogram.setText("");            
         }
         if (plikRadioButton.isSelected()) {
             wczytajJawneButton.setDisable(false);
@@ -80,118 +79,86 @@ public class HelloController implements Initializable {
 
     public void szyfruj(ActionEvent event) {
         if (klucz1.getText() == "" || klucz2.getText() == "" || klucz3.getText() == "") {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle("Error");
-                a.setHeaderText(null);
-                a.setContentText("Prosze o wpisanie kluczy");
-                a.show();
+                alert("Prosze o wpisanie kluczy");
         } else {
             ThreeDes threeDes = new ThreeDes(setKlucz(klucz1),setKlucz(klucz2),setKlucz(klucz3));
-            if (okienkoRadioButton.isSelected()) {
-                String tekstyJawne = tekstJawny.getText();
-                
+            String tekstyJawne = tekstJawny.getText();
+                String[] strings = divideInto64bit(tekstyJawne);
+                int len = strings.length;
                 if (tekstyJawne != "") {
-                    for(int i = 0; i < 8; i++) {
-                        if (tekstyJawne.length() % 8 != 0) {
-                            tekstyJawne += " ";
-                        }
+                    String part = "";
+                    for(int i=0; i< len; i++) {
+                        byte[] byteArray = strings[i].getBytes(StandardCharsets.UTF_8);
+                        long text = byteToLong(byteArray);
+                        long encryptedData = threeDes.encrypt(text);
+                        part += Long.toHexString(encryptedData);
                     }
-                    byte[] byteArray = tekstyJawne.getBytes(StandardCharsets.UTF_8);
-                    long text = byteToLong(byteArray);
-                    long encryptedData = threeDes.encrypt(text);
-                    szyfrogram.setText(Long.toHexString(encryptedData));
+                    szyfrogram.setText(part);
                 } else {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("Error");
-                    a.setHeaderText(null);
-                    a.setContentText("Prosze o wpisanie tekstu");
-                    a.show();
+                    alert("Prosze o wpisanie tekstu");
                 }
-            }
-            if (plikRadioButton.isSelected()) {
-                String tekstyJawne = tekstJawny.getText();
-                
-                if (tekstyJawne != "") {
-                    byte[] byteArray = tekstyJawne.getBytes(StandardCharsets.UTF_8);
-                    long text = byteToLong(byteArray);
-                    long encryptedData = threeDes.encrypt(text);
-                    szyfrogram.setText(Long.toHexString(encryptedData));
-                } else {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("Error");
-                    a.setHeaderText(null);
-                    a.setContentText("Prosze o wpisanie tekstu");
-                    a.show();
-                }
-            }
         }
     }
     
-    
-    
-    public long byteToLong (byte[] b) {
-        ByteBuffer buffer = ByteBuffer.wrap(b);
-        return buffer.getLong();
-
+    public String[] divideInto64bit(String s) {
+        int number = 0;
+        for(int i = 0; i < 8; i++) {
+            if (s.length() % 8 != 0) {
+                s += " ";
+                number += 1;
+            }
+        }
+        int n = s.length()/8;  
+        int temp = 0; 
+        int chars = 8;
+        String[] equalStr = new String [n];  
+        for(int i = 0; i < s.length(); i = i+chars) {  
+            String part = s.substring(i, i+chars);  
+            equalStr[temp] = part;  
+            temp++;  
+        }
+        return equalStr;
     }
     
-    public byte[] longToByte(long l) {
-        int n = String.valueOf(l).length();
-        ByteBuffer buffer = ByteBuffer.allocate(16);
-        buffer.putLong(l);
-        return buffer.array();
+    public String[] divideCypher(String s) {
+        int n = s.length()/16;  
+        int temp = 0; 
+        int chars = 16;
+        String[] equalStr = new String [n];  
+        for(int i = 0; i < s.length(); i = i+chars) {
+                String part = s.substring(i, i+chars);  
+                equalStr[temp] = part;  
+                temp++;  
+            }
+        return equalStr;
     }
+    
     
     public void deszyfruj(ActionEvent event) {
         if (klucz1.getText() == "" || klucz2.getText() == "" || klucz3.getText() == "") {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle("Error");
-                a.setHeaderText(null);
-                a.setContentText("Prosze o wpisanie kluczy");
-                a.show();
+                alert("Prosze o wpisanie kluczy");
         } else {
-            if (okienkoRadioButton.isSelected()) {
-                ThreeDes threeDes = new ThreeDes(setKlucz(klucz1),setKlucz(klucz2),setKlucz(klucz3));
-                String szyfrogramy1 = szyfrogram.getText();
-                if (szyfrogramy1 != "") {
-                    Long decimal = Long.parseLong(szyfrogramy1, 16);
-                    String szyfrogramy = Long.toString(decimal);
-                    long text1 = Long.parseLong(szyfrogramy);
+            ThreeDes threeDes = new ThreeDes(setKlucz(klucz1),setKlucz(klucz2),setKlucz(klucz3));
+            String szyfrogramy1 = szyfrogram.getText();
+            String[] strings = divideCypher(szyfrogramy1);
+            int len = strings.length;
+            if (szyfrogramy1 != "") {
+                String part = "";
+                for(int i=0; i< len; i++) {
+                    byte[] decimal = hexStringToBytes(strings[i]);
+                    long text1 = byteToLong(decimal);
                     long decryptedData = threeDes.decrypt(text1);
                     byte[] byteArray1 = longToByte(decryptedData);
                     String string = new String(byteArray1);
-                    tekstJawny.setText(string);
-                } else {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("Error");
-                    a.setHeaderText(null);
-                    a.setContentText("Prosze o wpisanie szyfru");
-                    a.show();
+                    part += string;
                 }
-
-            }
-            if (plikRadioButton.isSelected()) {
-                ThreeDes threeDes = new ThreeDes(setKlucz(klucz1),setKlucz(klucz2),setKlucz(klucz3));
-                String szyfrogramy1 = szyfrogram.getText();
-                if (szyfrogramy1 != "") {
-                    Long decimal = Long.parseLong(szyfrogramy1, 16);
-                    String szyfrogramy = Long.toString(decimal);
-                    long text1 = Long.parseLong(szyfrogramy);
-                    long decryptedData = threeDes.decrypt(text1);
-                    byte[] byteArrray1 = longToByte(decryptedData);
-                    String string = new String(byteArrray1);
-                    tekstJawny.setText(string);
-                } else {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("Error");
-                    a.setHeaderText(null);
-                    a.setContentText("Prosze o wpisanie szyfru");
-                    a.show();
-                }
+                tekstJawny.setText(part);
+            } else {
+                alert("Prosze o wpisanie szyfru");
             }
         }
     }
-
+    
     public void wczytajKlucze(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -202,42 +169,28 @@ public class HelloController implements Initializable {
         String line2= "";
         String line3= "";
         if(path != null) {
-
             try {
                 reader = new BufferedReader(new FileReader(plik.getAbsolutePath()));
                 line1 = reader.readLine();
                 line2 = reader.readLine();
                 line3 = reader.readLine();
-
                 kluczPlik.setText(path);
-                
-
             } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle("Error");
-                a.setHeaderText(null);
-                a.setContentText("Błąd kluczy");
-                a.show();
+                alert("Błąd kluczy");
             }
             klucz1.setText(line1);
             klucz2.setText(line2);
             klucz3.setText(line3);
-
         }
     }
     
     public void zapiszKlucze(ActionEvent event) {
         if (klucz1.getText() == "" || klucz2.getText() == "" || klucz3.getText() == "") {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("Error");
-            a.setHeaderText(null);
-            a.setContentText("Prosze o wpisanie kluczy");
-            a.show();
+            alert("Prosze o wpisanie kluczy");
         } else {
             String klucze = klucz1.getText() + "\n" + klucz2.getText() + "\n" + klucz3.getText();
             FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.showSaveDialog(null);
- 
+            File file = fileChooser.showSaveDialog(null); 
             if (file != null) {
                 saveTextToFile(klucze, file);
             }
@@ -250,13 +203,10 @@ public class HelloController implements Initializable {
         return key1;
     }
     
-    
     public void zapiszJawne(ActionEvent event) {
         String tekstyJawne = tekstJawny.getText();
         FileChooser fileChooser = new FileChooser();
-
             File file = fileChooser.showSaveDialog(null);
- 
             if (file != null) {
                 saveTextToFile(tekstyJawne, file);
             }
@@ -268,21 +218,13 @@ public class HelloController implements Initializable {
         plik = fileChooser.showOpenDialog(null);
         String path = plik.getAbsolutePath();
         if(plik != null) {
-
             try {
                 bytes = Files.readAllBytes(Path.of(plik.getAbsolutePath()));
-
                 String s = new String(bytes, StandardCharsets.UTF_8);
                 tekstJawny.setText(s);
                 plikJawny.setText(path);
-                
-
             } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle("Error");
-                a.setHeaderText(null);
-                a.setContentText("Błąd tekstu");
-                a.show();
+                alert("Błąd tekstu");
             }
 
         }
@@ -291,9 +233,7 @@ public class HelloController implements Initializable {
     public void zapiszSzyfr(ActionEvent event) {
         String szyfrogramy = szyfrogram.getText();
         FileChooser fileChooser = new FileChooser();
-
             File file = fileChooser.showSaveDialog(null);
- 
             if (file != null) {
                 saveTextToFile(szyfrogramy, file);
             }
@@ -308,18 +248,12 @@ public class HelloController implements Initializable {
 
             try {
                 bytes = Files.readAllBytes(Path.of(plik.getAbsolutePath()));
-
                 String s = new String(bytes, StandardCharsets.UTF_8);
                 szyfrogram.setText(s);
-                plikSzyfrogram.setText(path);
-                
+                plikSzyfrogram.setText(path);        
 
             } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle("Error");
-                a.setHeaderText(null);
-                a.setContentText("Błąd tekstu");
-                a.show();
+                alert("Błąd tekstu");
             }
 
         }
@@ -334,4 +268,34 @@ public class HelloController implements Initializable {
         } catch (IOException ex) {
         }
     }
+    
+        public long byteToLong (byte[] b) {
+        ByteBuffer buffer = ByteBuffer.wrap(b);
+        return buffer.getLong();
+    }
+    
+    public byte[] longToByte(long l) {
+        int n = String.valueOf(l).length();
+        ByteBuffer buffer = ByteBuffer.allocate(16);
+        buffer.putLong(l);
+        return buffer.array();
+    }
+    
+    public static byte[] hexStringToBytes(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+        
+    public void alert(String text) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setTitle("Error");
+        a.setHeaderText(null);
+        a.setContentText(text);
+        a.show();
+    }    
 }
+
