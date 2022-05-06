@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -65,6 +64,9 @@ public class HelloController implements Initializable {
             szyfrogram.clear();
             tekstJawny.setDisable(false);
             szyfrogram.setDisable(false);
+            plikJawny.setText("");
+            plikSzyfrogram.setText("");
+            
         }
         if (plikRadioButton.isSelected()) {
             wczytajJawneButton.setDisable(false);
@@ -89,6 +91,11 @@ public class HelloController implements Initializable {
                 String tekstyJawne = tekstJawny.getText();
                 
                 if (tekstyJawne != "") {
+                    for(int i = 0; i < 8; i++) {
+                        if (tekstyJawne.length() % 8 != 0) {
+                            tekstyJawne += " ";
+                        }
+                    }
                     byte[] byteArray = tekstyJawne.getBytes(StandardCharsets.UTF_8);
                     long text = byteToLong(byteArray);
                     long encryptedData = threeDes.encrypt(text);
@@ -120,6 +127,8 @@ public class HelloController implements Initializable {
         }
     }
     
+    
+    
     public long byteToLong (byte[] b) {
         ByteBuffer buffer = ByteBuffer.wrap(b);
         return buffer.getLong();
@@ -149,8 +158,8 @@ public class HelloController implements Initializable {
                     String szyfrogramy = Long.toString(decimal);
                     long text1 = Long.parseLong(szyfrogramy);
                     long decryptedData = threeDes.decrypt(text1);
-                    byte[] byteArrray1 = longToByte(decryptedData);
-                    String string = new String(byteArrray1);
+                    byte[] byteArray1 = longToByte(decryptedData);
+                    String string = new String(byteArray1);
                     tekstJawny.setText(string);
                 } else {
                     Alert a = new Alert(Alert.AlertType.ERROR);
@@ -244,7 +253,6 @@ public class HelloController implements Initializable {
     
     public void zapiszJawne(ActionEvent event) {
         String tekstyJawne = tekstJawny.getText();
-        //System.out.print("zapiszjawne");
         FileChooser fileChooser = new FileChooser();
 
             File file = fileChooser.showSaveDialog(null);
