@@ -68,7 +68,7 @@ public class Helper {
                 builder.append("_"); // add spacing after every 8 bits
             }
         }
-        System.out.println(builder);
+        //System.out.println(builder);
     }
 
 

@@ -4,8 +4,12 @@ package com.mycompany.sudoku.view;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.GeneralSecurityException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -62,8 +67,8 @@ public class HelloController implements Initializable {
             wczytajSzyfrogramButton.setDisable(true);
             tekstJawny.clear();
             szyfrogram.clear();
-            tekstJawny.setDisable(false);
-            szyfrogram.setDisable(false);
+            //tekstJawny.setDisable(false);
+            //szyfrogram.setDisable(false);
             plikJawny.setText("");
             plikSzyfrogram.setText("");            
         }
@@ -72,8 +77,8 @@ public class HelloController implements Initializable {
             wczytajSzyfrogramButton.setDisable(false);
             tekstJawny.clear();
             szyfrogram.clear();
-            tekstJawny.setDisable(true);
-            szyfrogram.setDisable(true);
+            //tekstJawny.setDisable(true);
+            //szyfrogram.setDisable(true);
         }
     }
 
@@ -87,11 +92,21 @@ public class HelloController implements Initializable {
                 int len = strings.length;
                 if (tekstyJawne != "") {
                     String part = "";
+                    String hex = "";
                     for(int i=0; i< len; i++) {
                         byte[] byteArray = strings[i].getBytes(StandardCharsets.UTF_8);
                         long text = byteToLong(byteArray);
                         long encryptedData = threeDes.encrypt(text);
-                        part += Long.toHexString(encryptedData);
+                        hex = Long.toHexString(encryptedData);
+                        if (hex.length() != 16) {
+                            String help = "";
+                            int add = hex.length() % 16;
+                            for (int j = 0; j < (16-add);j++) {
+                                help += "0";
+                            }
+                            hex = help + hex;
+                        }
+                        part += hex;
                     }
                     szyfrogram.setText(part);
                 } else {
@@ -140,6 +155,7 @@ public class HelloController implements Initializable {
         } else {
             ThreeDes threeDes = new ThreeDes(setKlucz(klucz1),setKlucz(klucz2),setKlucz(klucz3));
             String szyfrogramy1 = szyfrogram.getText();
+            System.out.println(szyfrogramy1.length());
             String[] strings = divideCypher(szyfrogramy1);
             int len = strings.length;
             if (szyfrogramy1 != "") {
@@ -258,6 +274,7 @@ public class HelloController implements Initializable {
 
         }
     }
+    
     
     private void saveTextToFile(String content, File file) {
         try {
