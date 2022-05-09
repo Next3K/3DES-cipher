@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
@@ -115,16 +116,16 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="tekstJawny" layoutX="25.0" layoutY="57.0" prefHeight="173.0" prefWidth="149.0" />
             <Text layoutX="32.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tekst jawny:" wrappingWidth="104.48553085327148" />
+            <TextArea fx:id="tekstJawny" layoutX="6.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </Pane>
    </left>
    <right>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="szyfrogram" layoutX="26.0" layoutY="59.0" prefHeight="171.0" prefWidth="149.0" />
             <Text layoutX="26.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Szyfrogram:" />
+            <TextArea fx:id="szyfrogram" layoutX="-11.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </Pane>
    </right>

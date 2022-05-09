@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -43,15 +44,17 @@ public class HelloController implements Initializable {
     @FXML private TextField klucz2;
     @FXML private TextField klucz3;
     @FXML private Text kluczPlik;
-    @FXML private TextField tekstJawny;
-    @FXML private TextField szyfrogram;
+    @FXML private TextArea tekstJawny;
+    @FXML private TextArea szyfrogram;
     @FXML private Text plikJawny;
     @FXML private Text plikSzyfrogram;
     @FXML private RadioButton okienkoRadioButton;
     @FXML private RadioButton plikRadioButton;
     
     private File plik = null;
+    private File plik2 = null;
     private byte[] bytes;
+    int number;
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,6 +62,8 @@ public class HelloController implements Initializable {
         wczytajSzyfrogramButton.setDisable(true);
         tekstJawny.setDisable(false);
         szyfrogram.setDisable(false);
+        tekstJawny.setWrapText(true);
+        szyfrogram.setWrapText(true);
     }
     
     public void radioSelect(ActionEvent event) {
@@ -94,7 +99,7 @@ public class HelloController implements Initializable {
                     String part = "";
                     String hex = "";
                     for(int i=0; i< len; i++) {
-                        byte[] byteArray = strings[i].getBytes(StandardCharsets.UTF_8);
+                        byte[] byteArray = strings[i].getBytes();
                         long text = byteToLong(byteArray);
                         long encryptedData = threeDes.encrypt(text);
                         hex = Long.toHexString(encryptedData);
@@ -219,7 +224,7 @@ public class HelloController implements Initializable {
         return key1;
     }
     
-    public void zapiszJawne(ActionEvent event) {
+    public void zapiszJawne(ActionEvent event) throws IOException {
         String tekstyJawne = tekstJawny.getText();
         FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showSaveDialog(null);
@@ -236,13 +241,12 @@ public class HelloController implements Initializable {
         if(plik != null) {
             try {
                 bytes = Files.readAllBytes(Path.of(plik.getAbsolutePath()));
-                String s = new String(bytes, StandardCharsets.UTF_8);
+                String s = new String(bytes);
                 tekstJawny.setText(s);
                 plikJawny.setText(path);
             } catch (IOException e) {
                 alert("Błąd tekstu");
             }
-
         }
     }
     
@@ -264,17 +268,15 @@ public class HelloController implements Initializable {
 
             try {
                 bytes = Files.readAllBytes(Path.of(plik.getAbsolutePath()));
-                String s = new String(bytes, StandardCharsets.UTF_8);
+                String s = new String(bytes);
                 szyfrogram.setText(s);
                 plikSzyfrogram.setText(path);        
 
             } catch (IOException e) {
                 alert("Błąd tekstu");
             }
-
         }
     }
-    
     
     private void saveTextToFile(String content, File file) {
         try {
@@ -286,11 +288,15 @@ public class HelloController implements Initializable {
         }
     }
     
-        public long byteToLong (byte[] b) {
-        ByteBuffer buffer = ByteBuffer.wrap(b);
-        return buffer.getLong();
+    public long byteToLong(byte[] bytes)
+    {
+        long value = 0L;
+        for (byte b : bytes) {
+            value = (value << 8) + (b & 255);
+        }
+        return value;
     }
-    
+
     public byte[] longToByte(long l) {
         int n = String.valueOf(l).length();
         ByteBuffer buffer = ByteBuffer.allocate(16);
@@ -298,7 +304,7 @@ public class HelloController implements Initializable {
         return buffer.array();
     }
     
-    public static byte[] hexStringToBytes(String s) {
+    public byte[] hexStringToBytes(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
@@ -315,4 +321,6 @@ public class HelloController implements Initializable {
         a.show();
     }    
 }
+    
+
 
