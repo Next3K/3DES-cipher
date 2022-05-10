@@ -152,6 +152,8 @@
             <Button fx:id="zapiszJawneButton" layoutX="26.0" layoutY="100.0" mnemonicParsing="false" onAction="#zapiszJawne" text="Zapisz" />
             <Text fx:id="plikJawny" layoutX="26.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="156.00002670288086" />
             <Text fx:id="plikSzyfrogram" layoutX="431.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="154.4000244140625" />
+            <Button fx:id="zakodujPlikButton" layoutX="274.0" layoutY="60.0" mnemonicParsing="false" onAction="#zakodujPlik" text="Zakoduj plik" />
+            <Button fx:id="odkodujPlikButton" layoutX="274.0" layoutY="125.0" mnemonicParsing="false" onAction="#odkodujPlik" text="Odkoduj plik" />
          </children>
       </Pane>
    </bottom>
