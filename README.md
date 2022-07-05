@@ -2,7 +2,6 @@
 ## _Implementation of 3DES cipher_
 
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 Cryptography university project. Project content on second branch called: base_branch
 
