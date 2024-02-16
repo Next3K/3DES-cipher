@@ -42,18 +42,14 @@ To get started with this project, ensure you have Maven and Java installed on yo
 
 ## Examples
 
-![Start panel](/Screenshots/game_start.png)
-
-![Game started](/Screenshots/game_play.png)
-
-![Saving board](/Screenshots/save_game.png)
+![App](/Screenshots/app.png)
 
 
 ## Features
 
 - encrypts data using provided password
 - decrypts encrypted data using the same password
-- GUI (work in progress)
+- GUI 
 
 ## License
 
