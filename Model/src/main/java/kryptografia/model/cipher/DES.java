@@ -23,15 +23,12 @@ public class DES {
      * @return encrypted 64 bits, long number.
      */
     public long encrypt(long data64bit) {
-        //System.out.println("Encryption process starts.");
         this.setData64bit(data64bit); // set block of data to encrypt
         this.initialDataBlockPermutation(); // permutation of 64 bit initial data.
         this.generateSmallerMainKey(); // generate 56bit key from 64bit main key.
         this.create28BitHalfKeys(); // divide 56 bit key into two 28bit parts.
         this.generateSubKeys(); // generate 16 48bit sub-keys.
         this.execute16RoundsOfEncryption(); // rounds of encryption + final permutation
-        //System.out.println('\n');
-        //System.out.println("FINAL ENCRYPTED DATA: " + Long.toHexString(this.encryptedData64bit));
         return this.encryptedData64bit; // return encrypted data.
     }
 
@@ -41,15 +38,12 @@ public class DES {
      * @return decrypted 64bit data.
      */
     public long decrypt(long data64bit) {
-        //System.out.println("Decryption process starts.");
         this.setData64bit(data64bit); // set block of data to encrypt
         this.initialDataBlockPermutation(); // permutation of 64 bit initial data.
         this.generateSmallerMainKey(); // generate 56bit key from 64bit main key.
         this.create28BitHalfKeys(); // divide 56 bit key into two 28bit parts.
         this.generateSubKeys(); // generate 16 48bit sub-keys.
         this.execute16RoundsOfDecryption(); // rounds of decryption.
-        //System.out.println('\n');
-        //System.out.println("FINAL DECRYPTED DATA: " + Long.toHexString(this.encryptedData64bit));
         return this.encryptedData64bit; // return decrypted data.
     }
 
@@ -80,20 +74,9 @@ public class DES {
     private void nthRound(int n, int L, int R, boolean decrypting) {
         int subKeyNumber = (decrypting) ? 17 - n : n; // first key when encrypting 1, when decrypting 16
         if (n <= 16 && n >= 1) {
-            //System.out.println();
-            //System.out.println("INFO: Round: " + n + " " + ((decrypting) ? "decrypting" : "encrypting") );
-            //System.out.printf("   L part: " + Integer.toHexString(L));
-            //System.out.println("   R part: " + Integer.toHexString(R));
             long subKey = this.getKey(subKeyNumber);
             int fFunctionOutput = fFunction(R, subKey);
             int newR = L ^ fFunctionOutput;
-            if (n != 16) {
-                //System.out.printf("new L part: " + Integer.toHexString(L));
-                //System.out.printf("new R part: " + Integer.toHexString(newR));
-            } else {
-                //System.out.printf("    new L part: " + Integer.toHexString(newR));
-                //System.out.println("    new R part: " + Integer.toHexString(R));
-            }
 
             if (n == 16) { // last permutation
                 this.encryptedData64bit = finalPermutation(newR, R); // last round, no swapping
@@ -112,17 +95,12 @@ public class DES {
         long rValue;
         rValue = Helper.setBits(L,32,0L,32);
         rValue = Helper.setBits(R,32,rValue,0);
-        //System.out.printf("    Final permutation input: " + Long.toHexString(rValue));
         long rValCopy = rValue;
         for (int i = 1; i <= Tables.IP_1.length; i++) {
             int positionOfBit = 64 - Tables.IP_1[i - 1]; // get position of bit inside 64bit key
             int valueOfBit = Helper.getBit(rValCopy, positionOfBit);
             rValue = Helper.setBit(rValue,64 - i,valueOfBit);
         }
-        //System.out.printf("    Final permutation output: " + Long.toHexString(rValue));
-        //System.out.println();
-        //System.out.println();
-        //System.out.println();
         return rValue;
     }
 
@@ -139,17 +117,11 @@ public class DES {
             int valueOfBit = Helper.getBit(R, positionOfBit);
             expanded48BitR = Helper.setBit(expanded48BitR,48 - i,valueOfBit);
         }
-        //System.out.println("(48 bit) F(): Expanded: ");
         Helper.printBits(expanded48BitR);
-
-        //System.out.println("(48 bit) F(): 48bit XOR sub-key: ");
         Helper.printBits(expanded48BitR);
-        //System.out.println(" XOR ");
         Helper.printBits(subKey);
 
         long xor48bit = expanded48BitR ^ subKey;
-
-        //System.out.println("(48 bit) F(): XOR output ");
         Helper.printBits(xor48bit);
 
         int new32bit = 0;
@@ -164,18 +136,12 @@ public class DES {
 
         int copy32bit = new32bit;
 
-        //System.out.println("(32 bit) F(): Compressed to 32 bits");
         Helper.printBits(new32bit);
         for (int i = 1; i <= Tables.PF.length; i++) { // Works fine
             int indexInTable = Tables.PF[i - 1];
             int valueToSet = Helper.getBit(copy32bit, 32 - indexInTable);
-            //System.out.printf("(32bi) Val before setting " + valueToSet + " at " + i + ": ");
-            //Helper.printBits(new32bit);
             new32bit = Helper.setBit(new32bit, 32 - i,valueToSet);
-            //System.out.printf("(32bi) Val after  setting " + valueToSet + " at " + i + ": ");
-            //Helper.printBits(new32bit);
         }
-        //System.out.println("(32 bit) F(): Permutation after s-block applied: ");
         Helper.printBits(new32bit);
         return new32bit;
     }
@@ -218,7 +184,6 @@ public class DES {
             smallerMainKey = Helper.setBit(smallerMainKey,56 - i,valueToSet);
         }
         this.smallerMainKey = smallerMainKey;
-        //System.out.printf("Smaller main key: ");
         Helper.printBits(this.smallerMainKey);
     }
 
@@ -226,9 +191,7 @@ public class DES {
     public void create28BitHalfKeys(){
         this.D0 = (int) Helper.extractBits(smallerMainKey,28,0); // get 28 bit key from 56 bit key
         this.C0 = (int) Helper.extractBits(smallerMainKey,28,28); // get 28 bit key from 56 bit key
-        //System.out.printf("C0 (28 bits)");
         Helper.printBits(C0);
-        //System.out.printf("D0 (28 bits)");
         Helper.printBits(D0);
     }
     /**
@@ -250,7 +213,6 @@ public class DES {
             CD = Helper.setBits(CX,28,0L,28);
             CD = Helper.setBits(DX,28,CD,0); // create long form int
 
-            //System.out.printf("(56bit) Sub-key " + i + " after " + numberOfLeftShifts + " left shifts applied, parts connected:  ");
             Helper.printBits(CD);
             long tmp = 0;
             for (int j = 1; j <= Tables.PC2.length; j++) { // Tables.PC2.length = 48
@@ -260,7 +222,6 @@ public class DES {
                 tmp = Helper.setBit(tmp, positionOfBitInLong, bitValueToSet); // set value
             }
             this.subKeys[i] = tmp;
-            //System.out.printf("(48bit) Sub-key " + i + " after permutation compressing to 48bits:       ");
             Helper.printBits(tmp);
         }
     }
@@ -274,14 +235,12 @@ public class DES {
      */
     public void initialDataBlockPermutation() {
         long messageCopy = this.data64bit; // copy the initial data
-        //System.out.println("INFO: initial permutation input:");
         Helper.printBits(messageCopy);
         for (int i = 1; i <= Tables.IP.length; i++) { // form i = 1 to i = 64
             int positionOfBit = 64 - Tables.IP[i - 1]; // get position of bit inside 64bit key
             int valueOfBit = Helper.getBit(messageCopy, positionOfBit);
             data64bit = Helper.setBit(data64bit,64 - i,valueOfBit);
         }
-        //System.out.println("INFO: initial permutation output:");
         Helper.printBits(data64bit);
     }
 
